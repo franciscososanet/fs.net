@@ -1,3 +1,4 @@
+require("dotenv").config();
 const fs = require("fs");
 const Discord = require("discord.js");
 const { REST } = require("@discordjs/rest");
@@ -12,7 +13,7 @@ for(const file of slashcommandsFiles){
     commands.push(slash.data.toJSON());
 }
 
-const rest = new REST({ version: "9" }).setToken("OTYwMjM3NjY0NjAxMjc2NDI3.YknhAw._DRZ7PgNOSeFDqqZ5Emam4-6HS0");
+const rest = new REST({ version: "9" }).setToken(process.env.DSTOKEN);
 
 createSlash();
 
