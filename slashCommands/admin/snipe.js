@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed } = require("discord.js");
 const Discord = require("discord.js");
-const snipe = require("../schemas/snipeSchema.js");
+const snipe = require("../../schemas/snipeSchema.js");
 
 module.exports = {
     data: new SlashCommandBuilder()

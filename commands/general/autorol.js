@@ -1,22 +1,21 @@
-const Discord = require("discord.js");
-
 module.exports = {
+    //ESTA VINCULADO CON EL EVENTO EVENTS/READY.JS
     name: "autorol",
-    alias: [],
+    description: "Agregarse roles",
 
-    async execute(client, message, args){
+    async execute(client, message, args, discord){
     
-        const row = new Discord.MessageActionRow()
+        const row = new discord.MessageActionRow()
             .addComponents(
                 [
-                    new Discord.MessageButton()
+                    new discord.MessageButton()
                     .setCustomId("hombra")
                     .setLabel("Hombra")
                     .setStyle("PRIMARY")
                     .setEmoji("🐒")
                 ],
                 [
-                    new Discord.MessageButton()
+                    new discord.MessageButton()
                     .setCustomId("mujero")
                     .setLabel("Mujero")
                     .setStyle("PRIMARY")
@@ -24,7 +23,7 @@ module.exports = {
                 ]
             );
 
-        const embed = new Discord.MessageEmbed()
+        const embed = new discord.MessageEmbed()
             .setTitle("Este es un discord no-deconstruido. Elegí tu sexo:")
             .setColor("GREEN");
 

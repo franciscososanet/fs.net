@@ -1,10 +1,8 @@
-const Discord = require("discord.js");
-
 module.exports = { 
     name: "say",
-    alias: [],
+    description: "repetir lo q diga",
 
-    execute(client, message, args){
+    async execute(client, message, args, discord) {
 
         const mensaje = args.join(" ");
         if(!mensaje) return message.channel.send("Escribi algo, boludito");
