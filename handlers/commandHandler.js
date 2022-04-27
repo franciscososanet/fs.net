@@ -1,19 +1,20 @@
 const fs = require("fs");
 
 module.exports = (client, discord) => {
-  console.log("---------------------- COMANDOS ----------------------");
-  fs.readdirSync("./commands/").forEach((dir) => {
-    const commands = fs.readdirSync(`./commands/${dir}`).filter((file) => file.endsWith(".js"));
+
+  console.log("---------------------- PREFIXCOMMANDS ----------------------");
+  fs.readdirSync("./prefixCommands/").forEach((dir) => {
+    const commands = fs.readdirSync(`./prefixCommands/${dir}`).filter((file) => file.endsWith(".js"));
 
     for (const file of commands) {
-      const cmd = require(`../commands/${dir}/${file}`);
+      const cmd = require(`../prefixCommands/${dir}/${file}`);
       if (cmd.name) {
-        console.log(cmd.name);
+        console.log(`PREFIXCOMMAND CARGADO: ${cmd.name}`);
         client.commands.set(cmd.name, cmd);
       } else {
-        console.log(`Error: ${file}`);
+        console.log(`Error en la carga del prefixcommand: ${file}`);
       }
     }
   });
-  console.log("---------------------- COMANDOS ----------------------");
+  console.log("");
 };

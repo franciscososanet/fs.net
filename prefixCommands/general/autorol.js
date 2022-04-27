@@ -1,5 +1,5 @@
 module.exports = {
-    //ESTA VINCULADO CON EL EVENTO EVENTS/READY.JS
+    
     name: "autorol",
     description: "Agregarse roles",
 

@@ -1,4 +1,5 @@
 module.exports = { 
+
     name: "say",
     description: "repetir lo q diga",
 
@@ -12,4 +13,5 @@ module.exports = {
             message.channel.send(`${mensaje}`) 
         }, 1000);
     }
+    
 }

@@ -1,14 +1,15 @@
-const Discord = require("discord.js");
+const discord = require("discord.js");
 
 module.exports = {
+    
     name: "menu",
     alias: [],
 
     async execute(client, message, args){
 
-        const row = new Discord.MessageActionRow()
+        const row = new discord.MessageActionRow()
         .addComponents(
-            new Discord.MessageSelectMenu()
+            new discord.MessageSelectMenu()
             .setCustomId("menuPrueba")
             .setMaxValues(1)
             .addOptions([
@@ -28,7 +29,7 @@ module.exports = {
         )
 
 
-        const embed = new DiscoressageEmbed()
+        const embed = new discord.MessageEmbed()
         .setTitle("Menu")
         .setColor("GREEN");
 
@@ -50,6 +51,5 @@ module.exports = {
             }
 
         });
-
     }
 }

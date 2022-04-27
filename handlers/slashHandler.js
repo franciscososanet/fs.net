@@ -24,7 +24,6 @@ module.exports = (client, discord) => {
       }
     }
   });
-  console.log("---------------------- COMANDOS SLASH ----------------------");
   client.on("ready", async () => {
     await client.application.commands.set(slash);
   });

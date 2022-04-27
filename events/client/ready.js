@@ -2,7 +2,7 @@ const discord = require("discord.js");
 
 module.exports = async (client) => {
 
-    console.log(`El bot: ${client.user.username} esta en linea`);
+    console.log(`- BOT ${client.user.username} ESTÁ EN LINEA`);
 
     //AUTOROLES
     client.channels.cache.get("968319961619636305").messages.fetch("968321292828831874").then(msg => {
@@ -35,7 +35,7 @@ module.exports = async (client) => {
     //NOTIFICACIONES TWITCH
     setInterval(async function(){
         const fetch = require("node-superfetch");
-        let user = "elded";
+        let user = "juansguarnizo";
 
         const uptime = await fetch.get(`https://decapi.me/twitch/uptime/${user}`);
         const avatar = await fetch.get(`https://decapi.me/twitch/avatar/${user}`);
@@ -66,18 +66,13 @@ module.exports = async (client) => {
                 });
 
                 await client.channels.cache.get("968401302059098134").send({ content: `${user} **está stremeando.**\nhttps://twitch.tv/${user}`, embeds: [embed] });
-
                 return await newdata.save();
             }
 
             if(data.titulo === `${title.body}`) return;
-
             await client.channels.cache.get("968401302059098134").send({ content: `${user} **está stremeando.**\nhttps://twitch.tv/${user}`, embeds: [embed] });
-
             await twitch.findOneAndUpdate({ user: user }, { titulo: title.body });
         }
-
     }, 60000);
-
 
 };

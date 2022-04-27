@@ -1,8 +1,9 @@
-const Discord = require("discord.js");
+const discord = require("discord.js");
 
 module.exports = {
+    
     name: "pregunta",
-    alias: ["hola"],
+    description: "Responde aleatoriamente a una pregunta",
 
     execute(client, message, args){
 
@@ -13,13 +14,10 @@ module.exports = {
         let respuestas = ["Si", "No", "Probablemente"];
         let random = respuestas[Math.floor(Math.random() * respuestas.length)];
 
-        const embed = new Discord.MessageEmbed()
+        const embed = new discord.MessageEmbed()
         .setTitle("titulow")
         .setDescription(`A tu pregunta:\n**${pregunta}**\n\nMi respuesta es:\n**${random}**`);
 
         message.channel.send({ embeds: [embed] });
-
-
-    }
-    
+    }    
 }
