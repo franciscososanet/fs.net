@@ -42,7 +42,7 @@ module.exports = async (client, discord, interaction)  => {
         try{
             await command.run(client, interaction);
         }catch(e){
-            console.error("ERROR AL EJECUTAR EL COMANDO: " + e);
+            console.error("ERROR AL EJECUTAR EL COMANDO: " + interaction.commandName + " --- " + e);
         }
     }
     

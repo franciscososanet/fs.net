@@ -22,7 +22,7 @@ module.exports = (client, discord) => {
           console.log(`Error: ${file}`);
         }
       } catch (error) {
-        console.log(`Error en el archivo: ${file}`);
+        console.log(`Error en el archivo: ${file} --- ` + error);
       }
     }
   });
