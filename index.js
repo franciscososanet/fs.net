@@ -4,7 +4,6 @@ const discord = require("discord.js");
 const intents = new discord.Intents();
 const client = new discord.Client({ intents: 32767 });
 
-
 //CONECTAR MONGODB
 const mongoose = require("mongoose");
 
@@ -24,7 +23,7 @@ client.commands = new discord.Collection();
 client.events = new discord.Collection();
 client.slash = new discord.Collection();
 
-["commandHandler", "eventHandler"].forEach((file) => {
+["commandHandler", "eventHandler", "slashHandler"].forEach((file) => {
     require(`./handlers/${file}`)(client, discord);
   });
 

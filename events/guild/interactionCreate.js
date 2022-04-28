@@ -32,17 +32,18 @@ module.exports = async (client, discord, interaction)  => {
         }
     }
 
-    //CONTEXT MENU
+    
+    //EJECUTAR COMANDOS O CONTEXTMENU
     if(interaction.isCommand() || interaction.isContextMenu()){
-        const slashcmds = client.slashcommands.get(interaction.commandName);
+        const command = client.slash.get(interaction.commandName);
 
-        if(!slashcmds) return;
+        if(!command) return;
         
         try{
-            await slashcmds.run(client, interaction);
+            await command.run(client, interaction);
         }catch(e){
-            console.error(e);
+            console.error("ERROR AL EJECUTAR EL COMANDO: " + e);
         }
     }
-
+    
 };

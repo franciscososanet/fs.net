@@ -2,6 +2,10 @@ const discord = require("discord.js");
 
 module.exports = async (client) => {
 
+    client.user.setUsername("FS.net");
+    client.user.setActivity("www.franciscososa.net", { type: 'WATCHING' });
+    client.user.setStatus("online");
+
     console.log(`- BOT ${client.user.username} ESTÁ EN LINEA`);
 
     //AUTOROLES

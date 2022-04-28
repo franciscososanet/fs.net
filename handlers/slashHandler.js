@@ -2,6 +2,7 @@ const fs = require("fs");
 let slash = [];
 
 module.exports = (client, discord) => {
+
   console.log("---------------------- COMANDOS SLASH ----------------------");
   fs.readdirSync("./slashCommands/").forEach((dir) => {
     const commands = fs
@@ -15,8 +16,9 @@ module.exports = (client, discord) => {
         if (scmd.name) {
           client.slash.set(scmd.name, scmd);
           slash.push(scmd);
-          console.log(`Comando: ${scmd.name}`);
+          console.log(`SLASHCOMMAND CARGADO: ${scmd.name}`);
         } else {
+          console.log(`Error: ${dir}`);
           console.log(`Error: ${file}`);
         }
       } catch (error) {
