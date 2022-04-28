@@ -1,23 +1,31 @@
-//CONTEXT MENU
-const Discord = require("discord.js");
-const { ContextMenuCommandBuilder } = require("@discordjs/builders");
+const discord = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = { 
-    data: new ContextMenuCommandBuilder()
-    .setName("Avatar")
-    .setType(2),
 
-    async run(client, interaction){
+    name: "avatar",
+    description: "Muestra el avatar de un usuario",
+    options: [
+        {
+            name: "usuario",
+            description: "El avatar de quién mostrar",
+            type: "USER",
+            required: true
+        }
+    ],
+ 
+    run: async (client, interaction) => {
         
-        let user = await interaction.guild.members.fetch(interaction.targetId);
+        const user = interaction.options.getUser("usuario");
 
-        const embed = new Discord.MessageEmbed()
-            .setTitle(`Avatar de ${user.user.tag}`)
-            .setImage(user.user.displayAvatarURL({ size: 2048, dynamic: true }))
+        const embed = new discord.MessageEmbed()
+            .setTitle(`Avatar de ${user.tag}`)
+            .setImage(user.displayAvatarURL({ size: 2048, dynamic: true }))
             .setColor("RANDOM")
             .setFooter(`Avatar pedido por: ${interaction.user.tag}`)
             .setTimestamp();
 
         interaction.reply({ embeds: [embed] });
     }
+
 };

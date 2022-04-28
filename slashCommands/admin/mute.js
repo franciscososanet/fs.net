@@ -4,12 +4,12 @@ const ms = require("ms");
 
 module.exports = {
 
-    name: "timeout",
-    description: "Aislar a un usuario.",
+    name: "mute",
+    description: "Mutear a un usuario.",
     options: [
         {
-            name: "miembro",
-            description: "El miembro a mutear.",
+            name: "usuario",
+            description: "El usuario a mutear.",
             type: "USER",
             required: "true",
         },
@@ -30,12 +30,11 @@ module.exports = {
                 
     run: async (client, interaction) => {
 
-        const user = interaction.options.getUser("miembro");
+        const user = interaction.options.getUser("usuario");
         const tiempo = interaction.options.getString("tiempo");
         const razon = interaction.options.getString("razon");
 
-        //let permisos = interaction.member.permission.has("MODERATE_MEMBERS");
-        //if(!permisos) return interaction.reply("No tienes los permisos requeridos para utilizar este comando");
+        if(!interaction.member.permissions.has("MODERATE_MEMBERS")) return interaction.reply("No tienes los permisos requeridos para utilizar este comando");
 
         const member = await interaction.guild.members.fetch(user.id);
 

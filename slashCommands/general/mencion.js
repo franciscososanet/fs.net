@@ -1,4 +1,5 @@
 module.exports = {
+
     name: "mencion",
     description: "Menciona un rol o usuario",
     options: [
@@ -15,6 +16,7 @@ module.exports = {
         required: "true",
       },
     ],
+
     run: async (client, interaction) => {
       try {
         let mencionado;
@@ -32,5 +34,6 @@ module.exports = {
         return interaction.reply({ content: "Faltan datos" });
         console.log("Error en sc: " + error);
       }
-    },
+    }
+
   };
