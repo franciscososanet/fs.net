@@ -23,22 +23,16 @@ module.exports = {
   run: async (client, interaction) => {
     const vc = interaction.member.voice.channel;
     if (!vc) {
-      return interaction.reply({
-        content: "Tenés que estar en un canal de voz",
-        ephemeral: true,
-      });
+      return interaction.reply({ content: "Tenés que estar en un canal de voz", ephemeral: true });
     }
 
     //BUSQUEDA DE VIDEO
     const vdRepro = await play.search(interaction.options.getString("cancion"));
-    //% COMPROBACION
-    if (!vdRepro) {
-      interaction.reply({
-        content: "No se encontraron videos",
-        ephemeral: true,
-      });
-    }
 
+    //COMPROBACION
+    if (!vdRepro) {
+      interaction.reply({ content: "No se encontraron videos", ephemeral: true });
+    }
 
     //CONEXION
     const stream = await play.stream(vdRepro[0].url);
