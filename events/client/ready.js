@@ -39,7 +39,7 @@ module.exports = async (client) => {
     //NOTIFICACIONES TWITCH
     setInterval(async function(){
         const fetch = require("node-superfetch");
-        let user = "juansguarnizo";
+        let user = "JackFyah";
 
         const uptime = await fetch.get(`https://decapi.me/twitch/uptime/${user}`);
         const avatar = await fetch.get(`https://decapi.me/twitch/avatar/${user}`);

@@ -2,15 +2,14 @@ const { getVoiceConnection } = require("@discordjs/voice");
 
 module.exports = {
 
-  name: "pause",
-  description: "Pausa la música",
+  name: "resumen",
+  description: "Reanuda la reproducción",
 
   run: async (client, interaction) => {
-
+    
     const pvc = getVoiceConnection(interaction.guild.id);
     const vc = interaction.member.voice.channel;
-
-    if (!vc){
+    if (!vc) {
       return interaction.reply({ content: "Tenés que estar en un canal de voz", ephemeral: true });
     }
 
@@ -23,8 +22,8 @@ module.exports = {
     }
 
     const player = pvc.state.subscription.player;
-    player.pause();
+    player.unpause();
 
-    interaction.reply("Bot pausado");
+    interaction.reply("Bot reproduciendo de nuevo");
   },
 };
