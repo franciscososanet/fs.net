@@ -31,26 +31,33 @@ module.exports = {
 
             let roles = msg.content.split(", "); //Almaceno en un array los roles que escribió el usuario
 
-            for(var i = 0; i < roles.length; i++){ //Recorro el array y busco el ID para cada nombre de rol que dio el usuario
+            try{
+                for(var i = 0; i < roles.length; i++){ //Recorro el array y busco el ID para cada nombre de rol que dio el usuario
 
-                let rol = message.guild.roles.cache.find(r => r.name === roles[i]);
-                console.log(`ROL: ${roles[i]} // ID: ${rol.id}`);
+                    let rol = message.guild.roles.cache.find(r => r.name === roles[i]);
+                    console.log(`ROL: ${roles[i]} // ID: ${rol.id}`);
+    
+                    row.addComponents(
+                        [
+                        new discord.MessageButton()
+                        .setCustomId(`${roles[i]}`)
+                        .setLabel(`${roles[i]}`)
+                        .setStyle("PRIMARY")
+                        ]
+                    );
+                }
 
-                row.addComponents(
-                    [
-                    new discord.MessageButton()
-                    .setCustomId(`${roles[i]}`)
-                    .setLabel(`${roles[i]}`)
-                    .setStyle("PRIMARY")
-                    ]
-                );
-            }
-
-            const embed2 = new discord.MessageEmbed()
+                const embed2 = new discord.MessageEmbed()
                 .setTitle("ELEGÍ TUS ROLES CLICKEANDO EN LOS BOTONES DE ABAJO")
                 .setColor("GREEN");
 
-            message.channel.send({ embeds: [embed2], components: [row] });
+                message.channel.send({ embeds: [embed2], components: [row] });
+            }catch(error){
+                message.channel.send(`**Ocurrió un error:** asegurate de estar escribiendo correctamente el nombre de todos los roles y de separarlos con una coma y espacio.\n
+                                    **Ejemplo:** Rojo, Azul, Verde\n\n
+                                    *Error: ${error}*`);
+                console.log(error);
+            }   
         
         });
 
