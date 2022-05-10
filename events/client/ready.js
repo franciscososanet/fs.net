@@ -1,7 +1,7 @@
+const colors = require("colors");
 const discord = require("discord.js");
 const { stream } = require("play-dl");
 const dataServerModel = require("../../schemas/dataServer");
-const colors = require("colors");
 
 module.exports = async (client, member) => {
 
@@ -22,48 +22,71 @@ module.exports = async (client, member) => {
 
         if(serverData){ 
             console.log(colors.green(`EL SERVER "${serversNombres[i]}" (${serversIds[i]}) YA SE ENCUENTRA REGISTRADO`));
+
         }else{ 
-            try {
+            try { //REGISTRO EL SERVER
                 let data = await dataServerModel.create({
                     serverID: serversIds[i],
                     serverName: serversNombres[i],
-                    channelAutoRol: null
+                    channelAutoRol: null,
+                    messageAutoRol: null,
+                    rolName: null,
+                    rolID: null
                 });
                 data.save();
-                console.log(`SE REGISTRÓ EL SERVER "${serversNombres[i]}" (${serversIds[i]})`);
+                console.log(colors.bgCyan( `SE REGISTRÓ EL SERVER "${serversNombres[i]}" (${serversIds[i]})`));
               } catch (error) {
                 console.log(error);
             }
         }
+
+        let query = await dataServerModel.find({ "serverID": `${serversIds[i]}` });
+
+        if(query){
+            CreateAutorol(query[0].channelAutoRol, query[0].messageAutoRol);
+        }else{
+            console.log("ERROR AL HACER LA QUERY");
+        }
+        
     }
 
 
     //AUTOROLES
-    client.channels.cache.get("968319961619636305").messages.fetch("968321292828831874").then(msg => {
-        let ifilter = i => !i.user.bot;
-        const collector = msg.createMessageComponentCollector({ filter: ifilter })
+    function CreateAutorol(idCanalRol, idMensajeRol){
 
-        collector.on("collect", async i => {
-            if(i.customId === "hombra"){
-                if(!i.member.roles.cache.has("917452809329332234")){
-                    await i.member.roles.add("917452809329332234");
-                    i.reply({ content: "Rol <@&917452809329332234> añadido", ephemeral: true });
-                }else{
-                    i.reply({ content: "Ya tenés el rol <@&917452809329332234>, salame", ephemeral: true });
-                }
-            }
+        console.log(`ID CANAL ROL: ${idCanalRol} /// ID MENSAJE ROL: ${idMensajeRol}`);
 
-            if(i.customId === "mujero"){
-                if(!i.member.roles.cache.has("917453572231270441")){
-                    await i.member.roles.add("917453572231270441");
-                    i.reply({ content: "Rol <@&917453572231270441> añadido", ephemeral: true });
-                }else{
-                    i.reply({ content: "Ya tenés el rol <@&917453572231270441>, salame", ephemeral: true });
-                }
-            }
+        if(idCanalRol !== null || idMensajeRol !== null){
 
-        });
-    });
+            client.channels.cache.get(idCanalRol).messages.fetch(idMensajeRol).then(msg => {
+                let ifilter = i => !i.user.bot;
+                const collector = msg.createMessageComponentCollector({ filter: ifilter })
+    
+                collector.on("collect", async i => {
+                    if(i.customId === "hombra"){
+                        if(!i.member.roles.cache.has("917452809329332234")){
+                            await i.member.roles.add("917452809329332234");
+                            i.reply({ content: "Rol <@&917452809329332234> añadido", ephemeral: true });
+                        }else{
+                            i.reply({ content: "Ya tenés el rol <@&917452809329332234>, salame", ephemeral: true });
+                        }
+                    }
+    
+                    if(i.customId === "mujero"){
+                        if(!i.member.roles.cache.has("917453572231270441")){
+                            await i.member.roles.add("917453572231270441");
+                            i.reply({ content: "Rol <@&917453572231270441> añadido", ephemeral: true });
+                        }else{
+                            i.reply({ content: "Ya tenés el rol <@&917453572231270441>, salame", ephemeral: true });
+                        }
+                    }
+    
+                });
+            });
+        }else{
+            console.log("EL ID DE CANAL Y/O MENSAJE NO ESTAN CONFIGURADOS");
+        }  
+    }
 
 
     //NOTIFICACIONES TWITCH ====> CREAR UN ARRAY Y QUE SE MANDEN MENSAJES POR CADA STREAM SI ES QUE ESTA ENCENDIDO

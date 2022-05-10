@@ -12,7 +12,7 @@ mongoose.connect(process.env.DB, {
     useUnifiedTopology: true
 }).then(() => {
     console.log("--------------------- LOGS DEL BOT ---------------------");
-    console.log("- CONECTADO A MONGODB");
+    console.log("- CONECTADO A MONGODB\n");
 }).catch((error) => {
     console.log("ERROR AL CONECTARSE A MONGODB: " + error);
 });
