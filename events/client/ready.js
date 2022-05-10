@@ -54,8 +54,6 @@ module.exports = async (client, member) => {
     //AUTOROLES
     function CreateAutorol(idCanalRol, idMensajeRol){
 
-        console.log(`ID CANAL ROL: ${idCanalRol} /// ID MENSAJE ROL: ${idMensajeRol}`);
-
         if(idCanalRol !== null || idMensajeRol !== null){
 
             client.channels.cache.get(idCanalRol).messages.fetch(idMensajeRol).then(msg => {
@@ -83,9 +81,7 @@ module.exports = async (client, member) => {
     
                 });
             });
-        }else{
-            console.log("EL ID DE CANAL Y/O MENSAJE NO ESTAN CONFIGURADOS");
-        }  
+        }
     }
 
 

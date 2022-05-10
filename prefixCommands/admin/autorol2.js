@@ -18,11 +18,24 @@ module.exports = {
         var nuevoValor = { $set: { channelAutoRol: `${message.channel.id}` } }; //Y le seteo el id de este canal al channelAutoRol
         await dataServerModel.updateOne(query, nuevoValor); 
 
-        async function obtenerMensajeId(msgId){
+        async function guardarMensajeId(msgId){
             
             var query2 = { serverID: `${message.guild.id}` };
             var nuevoValor2 = { $set: { messageAutoRol: `${msgId}` } };
-            await dataServerModel.updateOne(query2, nuevoValor2);
+            await dataServerModel.updateOne(query2, nuevoValor2); //Guardo en al db el id del mensaje
+        }
+
+        async function guardarDataRoles(msg, rolesName, rolesId){
+
+            var query = { serverID: `${msg.guild.id}` };
+            var values = { 
+                $set: { 
+                    rolName: `${rolesName}`,
+                    rolID: `${rolesId}` 
+                }
+            }; 
+
+            await dataServerModel.updateMany(query, values);
         }
 
         let filter = (m) => m.author.id == message.author.id; //Obtengo el id del usuario que ejecutó el comando, para solo colectar sus mensajes
@@ -33,11 +46,18 @@ module.exports = {
             try{
                 let roles = msg.content.split(", "); //Almaceno en un array los roles que escribió el usuario
 
+                let arrayRolesName = [];
+                let arrayRolesId = [];
+                
+                
                 const row = new discord.MessageActionRow();
 
                 for(var i = 0; i < roles.length; i++){ //Recorro el array y busco el ID para cada nombre de rol que dio el usuario
 
-                    let rol = message.guild.roles.cache.find(r => r.name === roles[i]); //console.log(`ROL: ${roles[i]} // ID: ${rol.id}`);
+                let rol = message.guild.roles.cache.find(r => r.name === roles[i]); //console.log(`ROL: ${roles[i]} // ID: ${rol.id}`);
+
+                arrayRolesName.push(rol.name); //Guardo todos los nombres de los roles en un array
+                arrayRolesId.push(rol.id); //Y sus ids en otro
     
                     row.addComponents(
                         [
@@ -48,6 +68,8 @@ module.exports = {
                         ]
                     );
                 }
+                
+                guardarDataRoles(msg, arrayRolesName, arrayRolesId);
 
                 const embed2 = new discord.MessageEmbed()
                 .setTitle("ELEGÍ TUS ROLES CLICKEANDO EN LOS BOTONES DE ABAJO")
@@ -55,7 +77,7 @@ module.exports = {
 
                 message.channel.send({ embeds: [embed2], components: [row] }).then(sent => { //Mando el embed
                     let msgId = sent.id; //Obtengo su id
-                    obtenerMensajeId(msgId); //Y lo envio a la funcion para que lo lleve a la DB
+                    guardarMensajeId(msgId); //Y lo envio a la funcion para que lo lleve a la DB
                 });
 
             }catch(error){
