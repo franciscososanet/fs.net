@@ -6,7 +6,7 @@ module.exports = {
     description: "Configurar y agregar autoroles",
 
     async execute(client, message, args, discord){
-
+    
         const embed = new discord.MessageEmbed()
             .setTitle("Para configurar los autoroles, a continuación escribí el nombre completo de cada uno de los roles.\nDeben estar separados con una coma y un espacio de por medio.")
             .setDescription("Ejemplo: Argentina, Chile, Bolivia, Peru")
@@ -48,8 +48,7 @@ module.exports = {
 
                 let arrayRolesName = [];
                 let arrayRolesId = [];
-                
-                
+                    
                 const row = new discord.MessageActionRow();
 
                 for(var i = 0; i < roles.length; i++){ //Recorro el array y busco el ID para cada nombre de rol que dio el usuario
@@ -62,7 +61,7 @@ module.exports = {
                     row.addComponents(
                         [
                         new discord.MessageButton()
-                        .setCustomId(`${roles[i]}`)
+                        .setCustomId(`${arrayRolesId[i]}`)
                         .setLabel(`${roles[i]}`)
                         .setStyle("PRIMARY")
                         ]

@@ -40,53 +40,9 @@ module.exports = async (client, member) => {
             }
         }
 
-        let query = await dataServerModel.find({ "serverID": `${serversIds[i]}` });
-
-        if(query){
-            CreateAutorol(query[0].channelAutoRol, query[0].messageAutoRol);
-        }else{
-            console.log("ERROR AL HACER LA QUERY");
-        }
-        
     }
-
-
-    //AUTOROLES
-    function CreateAutorol(idCanalRol, idMensajeRol){
-
-        if(idCanalRol !== null || idMensajeRol !== null){
-
-            client.channels.cache.get(idCanalRol).messages.fetch(idMensajeRol).then(msg => {
-                let ifilter = i => !i.user.bot;
-                const collector = msg.createMessageComponentCollector({ filter: ifilter })
-    
-                collector.on("collect", async i => {
-                    if(i.customId === "hombra"){
-                        if(!i.member.roles.cache.has("917452809329332234")){
-                            await i.member.roles.add("917452809329332234");
-                            i.reply({ content: "Rol <@&917452809329332234> añadido", ephemeral: true });
-                        }else{
-                            i.reply({ content: "Ya tenés el rol <@&917452809329332234>, salame", ephemeral: true });
-                        }
-                    }
-    
-                    if(i.customId === "mujero"){
-                        if(!i.member.roles.cache.has("917453572231270441")){
-                            await i.member.roles.add("917453572231270441");
-                            i.reply({ content: "Rol <@&917453572231270441> añadido", ephemeral: true });
-                        }else{
-                            i.reply({ content: "Ya tenés el rol <@&917453572231270441>, salame", ephemeral: true });
-                        }
-                    }
-    
-                });
-            });
-        }
-    }
-
 
     //NOTIFICACIONES TWITCH ====> CREAR UN ARRAY Y QUE SE MANDEN MENSAJES POR CADA STREAM SI ES QUE ESTA ENCENDIDO
-
     setInterval(async function(){
 
         const fetch = require("node-superfetch");
