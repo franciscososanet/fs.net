@@ -1,9 +1,14 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
-const twitch = new Schema({
-
-    twitchStream: { type: String, required: true },
-    titulo: { type: String, required: true }
+const twitch = new mongoose.Schema({
+    serverID: { type: String, required: true},
+    channelNotif: { type: String, required: true },
+    name: { type: String, required: true },
+    title: { type: String, required: true },
+    game: { type: String, required: true },
+    isOn: { type: String, required: true }
 });
 
-module.exports = model("twitchSchema", twitch);
+const model = mongoose.model("twitchSchema", twitch)
+
+module.exports = model;
