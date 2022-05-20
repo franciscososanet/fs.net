@@ -16,17 +16,40 @@ module.exports = {
         
         message.channel.send({ embeds: [embed] });
 
+
+        let filter = (m) => m.author.id == message.author.id; //Obtengo el id del usuario que ejecutó el comando, para solo colectar sus mensajes
+        let collector = new discord.MessageCollector(message.channel, { filter, max: 1 }); //Se colectará como máximo 1 mensaje del usuario
+
+        collector.on("collect", (msg) => {
+
+            try{
+                let streamers = msg.content.split(", "); //Almaceno en un array los streamers que escribió el usuario
+
+                streamers.forEach(s => {                    
+                    saveDataStreamer(msg, s);
+                });
+            }catch(e){
+                console.log(`Error: ${e}`);
+            }
+        }); 
+
         async function saveDataStreamer(msg, streamer){
 
             let data = await twitchModel.findOne({ name: streamer });
 
-            if(!data){
+            let uptime;
+            let avatar;
+            let viewers;
+            let title;
+            let game;
 
-                let uptime = await fetch.get(`https://decapi.me/twitch/uptime/${streamer}`);
-                let avatar = await fetch.get(`https://decapi.me/twitch/avatar/${streamer}`);
-                let viewers = await fetch.get(`https://decapi.me/twitch/viewercount/${streamer}`);
-                let title = await fetch.get(`https://decapi.me/twitch/title/${streamer}`);
-                let game = await fetch.get(`https://decapi.me/twitch/game/${streamer}`);
+            if(!data){ //Si no hay data, la creo
+
+                uptime = await fetch.get(`https://decapi.me/twitch/uptime/${streamer}`);
+                avatar = await fetch.get(`https://decapi.me/twitch/avatar/${streamer}`);
+                viewers = await fetch.get(`https://decapi.me/twitch/viewercount/${streamer}`);
+                title = await fetch.get(`https://decapi.me/twitch/title/${streamer}`);
+                game = await fetch.get(`https://decapi.me/twitch/game/${streamer}`);
 
 
                 let newdata = new twitchModel({
@@ -38,102 +61,59 @@ module.exports = {
                     isOn: uptime.body
                 });
     
+                embedStreamer(msg, streamer, uptime, avatar, viewers, title, game);
                 return await newdata.save();
-            }else{
-                console.log(`ESTOY EN EL ELSE DE ${streamer}`);
-                let title = await fetch.get(`https://decapi.me/twitch/title/${streamer}`);
-                console.log(`${title.body}`);
+                
+
+            }else{ //Y si ya existia data, la actualizo
+
+                uptime = await fetch.get(`https://decapi.me/twitch/uptime/${streamer}`);
+                avatar = await fetch.get(`https://decapi.me/twitch/avatar/${streamer}`);
+                viewers = await fetch.get(`https://decapi.me/twitch/viewercount/${streamer}`);
+                title = await fetch.get(`https://decapi.me/twitch/title/${streamer}`);
+                game = await fetch.get(`https://decapi.me/twitch/game/${streamer}`);
+
+                var query = { name: `${streamer}` }; 
+                var values = { 
+                    $set: {
+                        title: title.body,
+                        game: game.body,
+                        isOn: uptime.body
+                    }
+                };
+
+                await twitchModel.updateMany(query, values);
+
+                embedStreamer(msg, streamer, uptime, avatar, viewers, title, game);
             }
-
-            //await twitchModel.findOneAndUpdate({
-
-            //});
-
-
-
-
-            /* var query = { serverID: `${msg.guild.id}` };
-            var values = { 
-                $set: { 
-                    name: `${streamer}`,
-                    channelNotif: `${msg.channel.id}` 
-                }
-            }; 
- 
-            await twitchModel.updateMany(query, values);
-            */
         } 
 
-        let filter = (m) => m.author.id == message.author.id; //Obtengo el id del usuario que ejecutó el comando, para solo colectar sus mensajes
-        let collector = new discord.MessageCollector(message.channel, { filter, max: 1 }); //Se colectará como máximo 1 mensaje del usuario
+        async function embedStreamer(msg, streamer, uptime, avatar, viewers, title, game){
 
-        collector.on("collect", (msg) => {
+
+            let data = await twitchModel.findOne({ name: streamer });
 
             try{
-                let streamers = msg.content.split(", "); //Almaceno en un array los streamers que escribió el usuario
+                if(data.isOn !== `${streamer} is offline`){
 
-                streamers.forEach(s => {                    
-                    console.log(s);
-
-                    saveDataStreamer(msg, s);
-                });
+                    const embed = new discord.MessageEmbed()
+                        .setAuthor({ "name": `${streamer}`, "iconURL": `${avatar.body}` })
+                        .setTitle(`${title.body}`)
+                        .setThumbnail(`${avatar.body}`)
+                        .setURL(`https://twitch.tv/${streamer}`)
+                        .addField("Game", `${game.body}`, true)
+                        .addField("Viewers", `${viewers.body}`, true)
+                        .setImage(`https://static-cdn.jtvnw.net/previews-ttv/live_user_${streamer}-620x378.jpg`)
+                        .setColor("BLURPLE");
+    
+                    await client.channels.cache.get(`${msg.channel.id}`).send({ content: `**¡${streamer}** ESTÁ STREMEANDO!\nhttps://twitch.tv/${streamer}`, embeds: [embed] });
+    
+                }else{
+                    console.log(`Streamer ${streamer} OFFLINE`);
+                }
             }catch(e){
                 console.log(`Error: ${e}`);
-            }
-        }); 
-
-        
-
-
-
-             /*   
-            
-                guardarDataRoles(msg, arrayRolesName, arrayRolesId);
-
-                const embed2 = new discord.MessageEmbed()
-                .setTitle("ELEGÍ TUS ROLES CLICKEANDO EN LOS BOTONES DE ABAJO")
-                .setColor("GREEN");
-
-                message.channel.send({ embeds: [embed2], components: [row] }).then(sent => { //Mando el embed
-                    let msgId = sent.id; //Obtengo su id
-                    guardarMensajeId(msgId); //Y lo envio a la funcion para que lo lleve a la DB
-                });
-
-            }catch(error){
-                message.channel.send(`**Ocurrió un error:** asegurate de estar escribiendo correctamente el nombre de todos los roles y de separarlos con una coma y espacio.\n**Ejemplo:** Rojo, Azul, Verde\n\n*Error: ${error}*`);
-                console.log(error);
-            }  */  
-        
-
-
-
-        /* async function guardarMensajeId(msgId){
-            
-            var query2 = { serverID: `${message.guild.id}` };
-            var nuevoValor2 = { $set: { messageAutoRol: `${msgId}` } };
-            await dataServerModel.updateOne(query2, nuevoValor2); //Guardo en al db el id del mensaje
-        } */
-
-        /*async function guardarDataRoles(msg, rolesName, rolesId){
-
-            var query = { serverID: `${msg.guild.id}` };
-            var values = { 
-                $set: { 
-                    rolName: `${rolesName}`,
-                    rolID: `${rolesId}` 
-                }
-            }; 
-
-            await dataServerModel.updateMany(query, values);
-        } */
-
-
-
-        
-
-
-
-        
-
+            }  
+        }
     }
 }
