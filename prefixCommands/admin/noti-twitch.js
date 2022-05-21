@@ -16,7 +16,6 @@ module.exports = {
         
         message.channel.send({ embeds: [embed] });
 
-
         let filter = (m) => m.author.id == message.author.id; //Obtengo el id del usuario que ejecutó el comando, para solo colectar sus mensajes
         let collector = new discord.MessageCollector(message.channel, { filter, max: 1 }); //Se colectará como máximo 1 mensaje del usuario
 
@@ -89,7 +88,6 @@ module.exports = {
         } 
 
         async function embedStreamer(msg, streamer, uptime, avatar, viewers, title, game){
-
 
             let data = await twitchModel.findOne({ name: streamer });
 
