@@ -66,7 +66,7 @@ module.exports = {
                         .setStyle("PRIMARY")
                         ]
                     );
-                }
+            }
                 
                 guardarDataRoles(msg, arrayRolesName, arrayRolesId);
 

@@ -7,28 +7,32 @@ module.exports = async (client, discord, message) => {
   //INICIO AUTOROLES
   setInterval(async function(){
 
-    let queryIdServer = await dataServerModel.findOne({ "serverID": message.guild.id  });
+    try{
+      let queryIdServer = await dataServerModel.findOne({ "serverID": message.guild.id  });
 
-    if(message.id === queryIdServer.messageAutoRol ){
+      if(message.id === queryIdServer.messageAutoRol ){
     
-      clearInterval(this);
+        clearInterval(this);
 
-      let query = await dataServerModel.find({ "serverID": `${message.guild.id}` });
+        let query = await dataServerModel.find({ "serverID": `${message.guild.id}` });
 
-      var arrayNombres = query[0].rolName.split(",");
-      var arrayIds = query[0].rolID.split(",");
+        var arrayNombres = query[0].rolName.split(",");
+        var arrayIds = query[0].rolID.split(",");
 
-      await CrearAutoRol(
-        query[0].channelAutoRol,
-        query[0].messageAutoRol,
-        arrayNombres,
-        arrayIds
-      );
+        await CrearAutoRol(
+          query[0].channelAutoRol,
+          query[0].messageAutoRol,
+          arrayNombres,
+          arrayIds
+        );
+      }
+    }catch(e){
+      console.log(e);
     }
   }, 1000);
 
 
-  function CrearAutoRol(idCanalRol, idMensajeRol, nombreRoles, idRoles){
+  async function CrearAutoRol(idCanalRol, idMensajeRol, nombreRoles, idRoles){
 
     if(idCanalRol !== null && idMensajeRol !== null && nombreRoles!== null && idRoles !== null){
      

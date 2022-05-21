@@ -1,12 +1,44 @@
 const colors = require("colors");
 
+const dataServerModel = require("../../schemas/dataServer");
+
 module.exports = async (client) => {
 
     client.user.setUsername("FS.net");
     client.user.setActivity("www.franciscososa.net", { type: 'WATCHING' });
     client.user.setStatus("online");
 
-    console.log(colors.bgYellow(`- BOT ${client.user.username} (${client.user.id}) ESTÁ EN LINEA\n`));
+    console.log(colors.bgGreen(`- BOT ${client.user.username} (${client.user.id}) ESTÁ EN LINEA\n`));
+
+    //OBTENER IDs Y NOMBRES DE DONDE SE ENCUENTRA EL BOT
+    const serversIds = client.guilds.cache.map(guild => guild.id); 
+    const serversNombres = client.guilds.cache.map(guild => guild.name);
+
+    //RECORRO LOS ID Y LOS BUSCO EN MI DB. SI NO EXISTEN, LOS REGISTRO
+    for(var i = 0; i < serversIds.length; i++){
+
+        let serverData = await dataServerModel.findOne({ serverID: serversIds[i]  });
+
+        if(serverData){ 
+            console.log(colors.green(`EL SERVER "${serversNombres[i]}" (${serversIds[i]}) YA SE ENCUENTRA REGISTRADO`));
+
+        }else{ 
+            try { //REGISTRO EL SERVER
+                let data = await dataServerModel.create({
+                    serverID: serversIds[i],
+                    serverName: serversNombres[i],
+                    channelAutoRol: null,
+                    messageAutoRol: null,
+                    rolName: null,
+                    rolID: null
+                });
+                data.save();
+                console.log(colors.bgCyan( `SE REGISTRÓ EL SERVER "${serversNombres[i]}" (${serversIds[i]})`));
+              } catch (error) {
+                console.log(error);
+            }
+        }
+    }
 
     //NOTIFICACIONES TWITCH
     /* 

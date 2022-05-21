@@ -23,6 +23,9 @@ module.exports = async (client, discord, guild)  => { //Este evento se ejecuta a
             console.log(e);
         }
     }
+
+    let serverOwner = await guild.fetchOwner();
+    serverOwner.send("Gracias por invitarme al server")
 } 
 
 
